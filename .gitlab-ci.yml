@@ -1,0 +1,52 @@
+image: agenciacodedev/gitlab-ci:3.0
+
+variables:
+  MYSQL_DATABASE: codedev
+  MYSQL_ROOT_PASSWORD: secret
+  SSH_USER_HOST: codedev@159.203.87.52
+
+tests:
+  stage: test
+  only:
+    - master
+    - production
+  services:
+    - mysql:5.7
+  script:
+    - .gitlab-ci/tests.sh
+
+beta:
+  stage: deploy
+  environment:
+    name: staging
+    url: http://beta.codedev.com.br
+  only:
+    - master
+  script:
+    # Comandos essenciais para conectar o Docker com o servidor externo.
+    # Para saber mais: https://docs.gitlab.com/ee/ci/ssh_keys/README.html#ssh-keys-when-using-the-docker-executor
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
+    # Conecta no servidor via SSH e executa o arquivo shell de deploy
+    - ssh -T $SSH_USER_HOST 'bash -s' < .gitlab-ci/deploy-staging.sh
+
+live:
+  stage: deploy
+  environment:
+    name: production
+    url: http://www.codedev.com.br
+  only:
+    - production
+  script:
+    # Comandos essenciais para conectar o Docker com o servidor externo.
+    # Para saber mais: https://docs.gitlab.com/ee/ci/ssh_keys/README.html#ssh-keys-when-using-the-docker-executor
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
+    # Conecta no servidor via SSH e executa o arquivo shell de deploy
+    - ssh -T $SSH_USER_HOST 'bash -s' < .gitlab-ci/deploy-production.sh

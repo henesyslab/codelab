@@ -11,6 +11,19 @@
 |
 */
 
+Auth::routes();
+
+/**
+ * Backend Routes
+ */
+Route::get('app/{vuerouter?}', 'AppController@start')
+    ->middleware('auth')
+    ->where('vuerouter', '.*')
+    ->name('app');
+
+/**
+ * Frontend
+ */
 Route::get('/', function () {
     return view('welcome');
 });
