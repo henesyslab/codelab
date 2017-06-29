@@ -89,6 +89,11 @@ return [
     'url'      => 'O formato da URL indicada para o campo :attribute é inválido.',
 
     /*
+    | Regras específicas deste projeto.
+    */
+    'gitlab_unique' => 'A namespace informada já está em uso.',
+
+    /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
     |--------------------------------------------------------------------------

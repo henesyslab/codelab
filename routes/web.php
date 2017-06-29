@@ -13,7 +13,7 @@
 
 Auth::routes();
 
-/**
+/*
  * Backend Routes
  */
 Route::get('app/{vuerouter?}', 'AppController@start')
@@ -21,7 +21,14 @@ Route::get('app/{vuerouter?}', 'AppController@start')
     ->where('vuerouter', '.*')
     ->name('app');
 
-/**
+// AJAX Routes
+Route::namespace('Ajax')
+    ->prefix('ajax')
+    ->group(function () {
+        require __DIR__.'/ajax.php';
+    });
+
+/*
  * Frontend
  */
 Route::get('/', function () {

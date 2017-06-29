@@ -67,10 +67,12 @@
         <div class="row">
           <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-              <router-link tag="li" to="/">
-                <a href="/">Dashboard</a>
+              <router-link tag="li" :to="{ name: 'dashboard' }">
+                <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
               </router-link>
-              <router-link tag="li" to="/clientes">
+              <router-link tag="li" :to="{ name: 'client.index' }">
+                <router-link :to="{ name: 'client.index' }">Clientes</router-link>
+              </router-link>
             </ul>
           </div>
 

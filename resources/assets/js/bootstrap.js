@@ -1,3 +1,7 @@
+/**
+ * Principais helper functions
+ */
+window.helper = require('./helpers.js')
 
 window._ = require('lodash');
 
@@ -8,9 +12,9 @@ window._ = require('lodash');
  */
 
 try {
-    window.$ = window.jQuery = require('jquery');
+  window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
+  require('bootstrap');
 } catch (e) {}
 
 /**
@@ -32,10 +36,33 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+  console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+/**
+ * Registra o toastr como ferramenta de notificações.
+ */
+window.toastr = require('toastr')
+window.toastr.options.positionClass = 'toast-bottom-right'
+
+/**
+ * Registra o Bootstrap3 Dialog para auxiliar na exibição das janelas modais.
+ */
+window.BootstrapDialog = require('bootstrap3-dialog')
+window.BootstrapDialog.defaultOptions.closeByBackdrop = false
+window.BootstrapDialog.defaultOptions.closeByKeyboard= false
+
+/**
+ * Registra o Collect.js para trabalhar com arrays e objetos.
+ */
+window.collect = require('collect.js')
+
+/**
+ * Registra o SpeakingURL para sanitizar strings.
+ */
+window.getSlug = require('speakingurl')
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
