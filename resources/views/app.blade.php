@@ -14,7 +14,7 @@
   <body>
     <div id="app">
       <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container-fluid">
           <div class="navbar-header">
 
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
@@ -31,10 +31,6 @@
 
           <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <ul class="nav navbar-nav">
-              <li><a href="#">Dashboard</a></li>
-              <li><a href="#">Settings</a></li>
-              <li><a href="#">Profile</a></li>
-              <li><a href="#">Help</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -71,14 +67,15 @@
         <div class="row">
           <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-              <router-link tag="li" to="/dashboard">
-                <a href="/dashboard">Dashboard</a>
+              <router-link tag="li" to="/">
+                <a href="/">Dashboard</a>
               </router-link>
+              <router-link tag="li" to="/clientes">
             </ul>
           </div>
 
           <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1>Dashboard</h1>
+            <router-view></router-view>
           </div>
         </div>
       </div>
