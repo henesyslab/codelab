@@ -1,36 +1,39 @@
 <template>
 <div class="hide">
   <form id="formModal" method="post" v-on:submit.prevent>
+    <div v-bind:class="{ 'form-group': true, 'has-error': errors.name }">
+      <label class="control-label" for="client_id">Cliente</label>
+      <select name="client_id" class="form-control" v-model="project.client_id">
+        <option value="">Selecione...</option>
+        <option v-bind:value="client.id" v-for="client in clients">{{ client.name }}</option>
+      </select>
+      <div class="help-block" v-for="error in errors.client_id">
+        {{ error }}
+      </div>
+    </div>
+
     <div class="row">
-      <div :class="{ 'col-sm-6': true, 'form-group': true, 'has-error': errors.name }">
+      <div v-bind:class="{ 'col-sm-6': true, 'form-group': true, 'has-error': errors.name }">
         <label class="control-label" for="name">Nome</label>
-        <input type="text" name="name" class="form-control" placeholder="Nome" v-model="client.name" v-on:keyup="fillPathField()">
+        <input type="text" name="name" class="form-control" placeholder="Nome" v-model="project.name" v-on:keyup="fillPathField()">
         <div class="help-block" v-for="error in errors.name">
           {{ error }}
         </div>
       </div>
 
-      <div :class="{ 'col-sm-6': true, 'form-group': true, 'has-error': errors.path }">
+      <div v-bind:class="{ 'col-sm-6': true, 'form-group': true, 'has-error': errors.path }">
         <label class="control-label" for="path">Namespace</label>
-        <input type="text" name="path" class="form-control" placeholder="Namespace" v-model="client.path" :disabled="$route.name === 'client.edit'">
+        <input type="text" name="path" class="form-control" placeholder="Namespace" v-model="project.path" v-bind:disabled="$route.name === 'project.edit'">
         <div class="help-block" v-for="error in errors.path">
           {{ error }}
         </div>
       </div>
     </div>
 
-    <div :class="{ 'form-group': true, 'has-error': errors.description }">
+    <div v-bind:class="{ 'form-group': true, 'has-error': errors.description }">
       <label class="control-label" for="description">Descrição</label>
-      <textarea name="description" rows="2" class="form-control" placeholder="Descrição" v-model="client.description"></textarea>
+      <textarea name="description" rows="2" class="form-control" placeholder="Descrição" v-model="project.description"></textarea>
       <div class="help-block" v-for="error in errors.description">
-        {{ error }}
-      </div>
-    </div>
-
-    <div :class="{ 'form-group': true, 'has-error': errors.notes }">
-      <label class="control-label" for="notes">Notas</label>
-      <textarea name="notes" rows="5" class="form-control" placeholder="Notas" v-model="client.notes"></textarea>
-      <div class="help-block" v-for="error in errors.notes">
         {{ error }}
       </div>
     </div>
@@ -42,18 +45,22 @@
 export default {
   data() {
     return {
-      client: {
+      project: {
+        client_id: '',
         name: '',
         path: '',
         description: '',
-        notes: '',
       },
+      clients: {},
       errors: {},
     }
   },
   mounted() {
+    // Preenche o select de clientes
+    this.fetchClients()
+
     // Exibe o formulário de cadastro ou edição
-    if (this.$route.name === 'client.new') {
+    if (this.$route.name === 'project.new') {
       this.openCreateForm()
     } else {
       this.openEditForm()
@@ -61,12 +68,23 @@ export default {
   },
   methods: {
     /**
-     * Gera uma namespace automaticamente a medida que o nome do cliente é informado.
+     * Busca pela lista de clientes cadastrados no sistema.
+     */
+    fetchClients() {
+      axios.get('/ajax/clientes').then(response => {
+        this.clients = response.data
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+
+    /**
+     * Gera uma namespace automaticamente a medida que o nome do projeto é informado.
      */
     fillPathField() {
       // Somente durante o cadastro
-      if (this.$route.name === 'client.new') {
-        this.client.path = helper.generateNamespace(this.client.name)
+      if (this.$route.name === 'project.new') {
+        this.project.path = helper.generateNamespace(this.project.name)
       }
     },
 
@@ -74,11 +92,11 @@ export default {
      * Reseta os dados do formulário para seu estado inicial.
      */
     clearForm() {
-      this.client = {
+      this.project = {
+        client_id: '',
         name: '',
         path: '',
         description: '',
-        notes: '',
       }
     },
 
@@ -123,7 +141,7 @@ export default {
       // Limpa o formulário
       this.clearForm()
       // Redireciona o usuário para a lista
-      this.$router.push('/clientes')
+      this.$router.push('/projetos')
       // Fecha a janela modal
       dialog.close()
     },
@@ -132,7 +150,7 @@ export default {
      * Exibe o formulário de cadastro
      */
     openCreateForm() {
-      this.openDialog('Novo Cliente', modal => {
+      this.openDialog('Novo Projeto', modal => {
         this.storeClient(modal)
       })
     },
@@ -141,9 +159,9 @@ export default {
      * Exibe o formulário de edição
      */
     openEditForm() {
-      axios.get('/ajax/clientes/' + this.$route.params.id + '/edit').then(response => {
-        this.client = response.data
-        this.openDialog('Editando o Cliente: ' + this.client.name, modal => {
+      axios.get('/ajax/projetos/' + this.$route.params.id + '/edit').then(response => {
+        this.project = response.data
+        this.openDialog('Editando o Projeto: ' + this.project.name, modal => {
           this.updateClient(modal)
         })
       })
@@ -154,11 +172,11 @@ export default {
      * @param  modal  Instância da janela modal
      */
     storeClient(modal) {
-      axios.post('/ajax/clientes', this.client).then(response => {
+      axios.post('/ajax/projetos', this.project).then(response => {
         // Exibe uma mensagem de sucesso
         toastr.success(response.data.message, 'Sucesso')
-        // Adiciona o novo cliente à lista
-        this.$parent.clients.push(response.data.client)
+        // Adiciona o novo projeto à lista
+        this.$parent.projects.push(response.data.project)
         // Fecha a janela modal
         this.closeDialog(modal.dialog)
       }).catch(error => {
@@ -173,11 +191,11 @@ export default {
      * @param  modal  Instância da janela modal
      */
     updateClient(modal) {
-      axios.patch('/ajax/clientes/' + this.$route.params.id, this.client).then(response => {
+      axios.patch('/ajax/projetos/' + this.$route.params.id, this.project).then(response => {
         // Exibe uma mensagem de sucesso
         toastr.success(response.data.message, 'Sucesso')
 
-        // Atualiza a lista com os dados dos clientes
+        // Atualiza a lista com os dados dos projetos
         this.$parent.fetchClients()
 
         // Fecha a janela modal

@@ -6,6 +6,10 @@ const Client = {
   index: require('./components/client/index.vue'),
   form:  require('./components/client/form.vue'),
 }
+const Project = {
+  index: require('./components/project/index.vue'),
+  form:  require('./components/project/form.vue'),
+}
 
 export default new VueRouter({
     mode: 'history',
@@ -16,6 +20,10 @@ export default new VueRouter({
       { path: '/clientes', name: 'client.index', component: Client.index, children: [
         { path: 'adicionar', name: 'client.new', component: Client.form },
         { path: 'editar/:id', name: 'client.edit', component: Client.form },
+      ] },
+      { path: '/projetos', name: 'project.index', component: Project.index, children: [
+        { path: 'adicionar', name: 'project.new', component: Project.form },
+        { path: 'editar/:id', name: 'project.edit', component: Project.form },
       ] },
     ]
 })

@@ -13709,8 +13709,11 @@ __webpack_require__(15);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
-  el: '#app',
-  router: __WEBPACK_IMPORTED_MODULE_2__router__["a" /* default */]
+  el: 'body > .wrapper',
+  router: __WEBPACK_IMPORTED_MODULE_2__router__["a" /* default */],
+  data: {
+    title: ''
+  }
 });
 
 /***/ }),
@@ -49488,12 +49491,16 @@ var Client = {
   index: __webpack_require__(142),
   form: __webpack_require__(145)
 };
+var Project = {
+  index: __webpack_require__(148),
+  form: __webpack_require__(151)
+};
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
   mode: 'history',
   base: '/app',
   linkExactActiveClass: 'active',
-  routes: [{ path: '/', name: 'dashboard', component: Dashboard }, { path: '/clientes', name: 'client.index', component: Client.index, children: [{ path: 'adicionar', name: 'client.new', component: Client.form }, { path: 'editar/:id', name: 'client.edit', component: Client.form }] }]
+  routes: [{ path: '/', name: 'dashboard', component: Dashboard }, { path: '/clientes', name: 'client.index', component: Client.index, children: [{ path: 'adicionar', name: 'client.new', component: Client.form }, { path: 'editar/:id', name: 'client.edit', component: Client.form }] }, { path: '/projetos', name: 'project.index', component: Project.index, children: [{ path: 'adicionar', name: 'project.new', component: Project.form }, { path: 'editar/:id', name: 'project.edit', component: Project.form }] }]
 }));
 
 /***/ }),
@@ -49664,6 +49671,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     // Busca pela listagem de clientes
     this.fetchClients();
+
+    console.log(this.$root);
   },
 
   methods: {
@@ -49728,10 +49737,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "panel panel-default"
+    staticClass: "box box-primary"
   }, [_c('div', {
-    staticClass: "panel-heading"
-  }, [_vm._v("\n    Clientes\n    "), _c('div', {
+    staticClass: "box-header with-border"
+  }, [_c('h3', {
+    staticClass: "box-title"
+  }, [_vm._v("Clientes")]), _vm._v(" "), _c('div', {
     staticClass: "pull-right"
   }, [_c('div', {
     staticClass: "btn-group"
@@ -49745,7 +49756,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('i', {
     staticClass: "fa fa-plus"
   }), _vm._v(" Novo Cliente\n        ")])], 1)])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-body"
+    staticClass: "box-body"
   }, [(_vm.clients.length == 0) ? _c('p', {
     staticClass: "lead text-center text-warning"
   }, [_c('i', {
@@ -50192,16 +50203,1131 @@ if (false) {
 }
 
 /***/ }),
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(176)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(149),
+  /* template */
+  __webpack_require__(150),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/victor/Projetos/CodeDev/resources/assets/js/components/project/index.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-8de6db88", Component.options)
+  } else {
+    hotAPI.reload("data-v-8de6db88", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      projects: []
+    };
+  },
+  mounted: function mounted() {
+    // Busca pela listagem de projetos
+    this.fetchProjects();
+  },
+
+  methods: {
+    /**
+     * Executa uma requisição AJAX em busca dos projetos cadastrados no sistema.
+     */
+    fetchProjects: function fetchProjects() {
+      var _this = this;
+
+      axios.get('/ajax/projetos').then(function (response) {
+        _this.projects = response.data;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
+
+    /**
+     * Exibe uma janela de confirmação para a exclusão do projeto.
+     */
+    deleteProject: function deleteProject(project_id) {
+      var that = this;
+      BootstrapDialog.show({
+        type: BootstrapDialog.TYPE_DANGER,
+        title: 'Remover projeto',
+        message: 'Tem certeza que deseja remover este projeto? Esta operação não poderá ser desfeita.',
+        buttons: [{
+          label: 'Cancelar',
+          cssClass: 'btn btn-default',
+          hotkey: 27,
+          action: function action(dialog) {
+            dialog.close();
+          }
+        }, {
+          label: 'OK',
+          cssClass: 'btn btn-danger',
+          hotkey: 13,
+          action: function action(dialog) {
+            this.disable().spin();
+            dialog.setClosable(false);
+
+            axios.delete('/ajax/projetos/' + project_id).then(function (response) {
+              // Atualiza a lista com os dados dos projetos
+              that.fetchProjects();
+              // Exibe uma mensagem de sucesso
+              toastr.success(response.data.message, 'Sucesso');
+              // Fecha a janela modal
+              dialog.close();
+            }).catch(function (error) {
+              console.log(error);
+            });
+          }
+        }]
+      });
+    }
+  }
+});
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "box box-primary"
+  }, [_c('div', {
+    staticClass: "box-header with-border"
+  }, [_c('h3', {
+    staticClass: "box-title"
+  }, [_vm._v("Projetos")]), _vm._v(" "), _c('div', {
+    staticClass: "pull-right"
+  }, [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('router-link', {
+    staticClass: "btn btn-primary btn-xs",
+    attrs: {
+      "to": {
+        name: 'project.new'
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-plus"
+  }), _vm._v(" Novo Projeto\n        ")])], 1)])]), _vm._v(" "), _c('div', {
+    staticClass: "box-body"
+  }, [(_vm.projects.length == 0) ? _c('p', {
+    staticClass: "lead text-center text-warning"
+  }, [_c('i', {
+    staticClass: "fa fa-warning"
+  }), _vm._v(" Nada encontrado\n    ")]) : _vm._e(), _vm._v(" "), (_vm.projects.length > 0) ? _c('ul', {
+    staticClass: "list-unstyled list-padding list-striped list-hover"
+  }, _vm._l((_vm.projects), function(project) {
+    return _c('li', {
+      attrs: {
+        "id": 'project_' + project.id
+      }
+    }, [_c('div', {
+      staticClass: "pull-left"
+    }, [_c('strong', [_vm._v(_vm._s(project.path) + " / " + _vm._s(project.name))]), _c('br'), _vm._v(" "), _c('span', {
+      staticClass: "text-muted"
+    }, [_vm._v(_vm._s(project.description))])]), _vm._v(" "), _c('div', {
+      staticClass: "pull-right"
+    }, [_c('a', {
+      staticClass: "btn btn-success btn-xs",
+      attrs: {
+        "href": 'https://gitlab.com/groups/' + project.path,
+        "target": "_blank"
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-eye"
+    })]), _vm._v(" "), _c('router-link', {
+      staticClass: "btn btn-primary btn-xs",
+      attrs: {
+        "to": {
+          name: 'project.edit',
+          params: {
+            id: project.id
+          }
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-edit"
+    })]), _vm._v(" "), _c('button', {
+      staticClass: "btn btn-danger btn-xs",
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.deleteProject(project.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-times"
+    })])], 1)])
+  })) : _vm._e()]), _vm._v(" "), _c('router-view')], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-8de6db88", module.exports)
+  }
+}
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(152),
+  /* template */
+  __webpack_require__(153),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/victor/Projetos/CodeDev/resources/assets/js/components/project/form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-34350b4a", Component.options)
+  } else {
+    hotAPI.reload("data-v-34350b4a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 152 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      project: {
+        client_id: '',
+        name: '',
+        path: '',
+        description: ''
+      },
+      clients: {},
+      errors: {}
+    };
+  },
+  mounted: function mounted() {
+    // Preenche o select de clientes
+    this.fetchClients();
+
+    // Exibe o formulário de cadastro ou edição
+    if (this.$route.name === 'project.new') {
+      this.openCreateForm();
+    } else {
+      this.openEditForm();
+    }
+  },
+
+  methods: {
+    /**
+     * Busca pela lista de clientes cadastrados no sistema.
+     */
+    fetchClients: function fetchClients() {
+      var _this = this;
+
+      axios.get('/ajax/clientes').then(function (response) {
+        _this.clients = response.data;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
+
+    /**
+     * Gera uma namespace automaticamente a medida que o nome do projeto é informado.
+     */
+    fillPathField: function fillPathField() {
+      // Somente durante o cadastro
+      if (this.$route.name === 'project.new') {
+        this.project.path = helper.generateNamespace(this.project.name);
+      }
+    },
+
+
+    /**
+     * Reseta os dados do formulário para seu estado inicial.
+     */
+    clearForm: function clearForm() {
+      this.project = {
+        client_id: '',
+        name: '',
+        path: '',
+        description: ''
+      };
+    },
+
+
+    /**
+     * Abre a janela modal com o formulário
+     * @param  title  Título da janela modal
+     * @param  callback
+     */
+    openDialog: function openDialog(title, callback) {
+      var _this2 = this;
+
+      BootstrapDialog.show({
+        type: BootstrapDialog.TYPE_PRIMARY,
+        title: title,
+        message: $('#formModal'),
+        buttons: [{
+          label: 'Cancelar',
+          cssClass: 'btn btn-default',
+          hotkey: 27,
+          action: function action(dialog) {
+            _this2.closeDialog(dialog);
+          }
+        }, {
+          icon: 'fa fa-floppy-o',
+          label: ' Salvar informações',
+          cssClass: 'btn btn-primary',
+          // hotkey: 13,
+          action: function action(dialog) {
+            var button = this;
+            button.disable().spin();
+            dialog.setClosable(false);
+
+            callback({ dialog: dialog, button: button });
+          }
+        }]
+      });
+    },
+
+
+    /**
+     * Fecha a janela modal com o formulário
+     * @param  dialog  Instância da janela modal
+     */
+    closeDialog: function closeDialog(dialog) {
+      // Limpa o formulário
+      this.clearForm();
+      // Redireciona o usuário para a lista
+      this.$router.push('/projetos');
+      // Fecha a janela modal
+      dialog.close();
+    },
+
+
+    /**
+     * Exibe o formulário de cadastro
+     */
+    openCreateForm: function openCreateForm() {
+      var _this3 = this;
+
+      this.openDialog('Novo Projeto', function (modal) {
+        _this3.storeClient(modal);
+      });
+    },
+
+
+    /**
+     * Exibe o formulário de edição
+     */
+    openEditForm: function openEditForm() {
+      var _this4 = this;
+
+      axios.get('/ajax/projetos/' + this.$route.params.id + '/edit').then(function (response) {
+        _this4.project = response.data;
+        _this4.openDialog('Editando o Projeto: ' + _this4.project.name, function (modal) {
+          _this4.updateClient(modal);
+        });
+      });
+    },
+
+
+    /**
+     * Envia os novos dados para serem processados e armazenados pelo servidor.
+     * @param  modal  Instância da janela modal
+     */
+    storeClient: function storeClient(modal) {
+      var _this5 = this;
+
+      axios.post('/ajax/projetos', this.project).then(function (response) {
+        // Exibe uma mensagem de sucesso
+        toastr.success(response.data.message, 'Sucesso');
+        // Adiciona o novo projeto à lista
+        _this5.$parent.projects.push(response.data.project);
+        // Fecha a janela modal
+        _this5.closeDialog(modal.dialog);
+      }).catch(function (error) {
+        _this5.errors = error.response.data;
+        modal.button.enable().stopSpin();
+        modal.dialog.setClosable(true);
+      });
+    },
+
+
+    /**
+     * Envia os dados alterados para serem processados e armazenados pelo servidor.
+     * @param  modal  Instância da janela modal
+     */
+    updateClient: function updateClient(modal) {
+      var _this6 = this;
+
+      axios.patch('/ajax/projetos/' + this.$route.params.id, this.project).then(function (response) {
+        // Exibe uma mensagem de sucesso
+        toastr.success(response.data.message, 'Sucesso');
+
+        // Atualiza a lista com os dados dos projetos
+        _this6.$parent.fetchClients();
+
+        // Fecha a janela modal
+        _this6.closeDialog(modal.dialog);
+      }).catch(function (error) {
+        _this6.errors = error.response.data;
+        modal.button.enable().stopSpin();
+        modal.dialog.setClosable(true);
+      });
+    }
+  }
+});
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "hide"
+  }, [_c('form', {
+    attrs: {
+      "id": "formModal",
+      "method": "post"
+    },
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+      }
+    }
+  }, [_c('div', {
+    class: {
+      'form-group': true, 'has-error': _vm.errors.name
+    }
+  }, [_c('label', {
+    staticClass: "control-label",
+    attrs: {
+      "for": "client_id"
+    }
+  }, [_vm._v("Cliente")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.project.client_id),
+      expression: "project.client_id"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "name": "client_id"
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.project.client_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Selecione...")]), _vm._v(" "), _vm._l((_vm.clients), function(client) {
+    return _c('option', {
+      domProps: {
+        "value": client.id
+      }
+    }, [_vm._v(_vm._s(client.name))])
+  })], 2), _vm._v(" "), _vm._l((_vm.errors.client_id), function(error) {
+    return _c('div', {
+      staticClass: "help-block"
+    }, [_vm._v("\n        " + _vm._s(error) + "\n      ")])
+  })], 2), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    class: {
+      'col-sm-6': true, 'form-group': true, 'has-error': _vm.errors.name
+    }
+  }, [_c('label', {
+    staticClass: "control-label",
+    attrs: {
+      "for": "name"
+    }
+  }, [_vm._v("Nome")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.project.name),
+      expression: "project.name"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "name": "name",
+      "placeholder": "Nome"
+    },
+    domProps: {
+      "value": (_vm.project.name)
+    },
+    on: {
+      "keyup": function($event) {
+        _vm.fillPathField()
+      },
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.project.name = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _vm._l((_vm.errors.name), function(error) {
+    return _c('div', {
+      staticClass: "help-block"
+    }, [_vm._v("\n          " + _vm._s(error) + "\n        ")])
+  })], 2), _vm._v(" "), _c('div', {
+    class: {
+      'col-sm-6': true, 'form-group': true, 'has-error': _vm.errors.path
+    }
+  }, [_c('label', {
+    staticClass: "control-label",
+    attrs: {
+      "for": "path"
+    }
+  }, [_vm._v("Namespace")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.project.path),
+      expression: "project.path"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "name": "path",
+      "placeholder": "Namespace",
+      "disabled": _vm.$route.name === 'project.edit'
+    },
+    domProps: {
+      "value": (_vm.project.path)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.project.path = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _vm._l((_vm.errors.path), function(error) {
+    return _c('div', {
+      staticClass: "help-block"
+    }, [_vm._v("\n          " + _vm._s(error) + "\n        ")])
+  })], 2)]), _vm._v(" "), _c('div', {
+    class: {
+      'form-group': true, 'has-error': _vm.errors.description
+    }
+  }, [_c('label', {
+    staticClass: "control-label",
+    attrs: {
+      "for": "description"
+    }
+  }, [_vm._v("Descrição")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.project.description),
+      expression: "project.description"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "name": "description",
+      "rows": "2",
+      "placeholder": "Descrição"
+    },
+    domProps: {
+      "value": (_vm.project.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.project.description = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _vm._l((_vm.errors.description), function(error) {
+    return _c('div', {
+      staticClass: "help-block"
+    }, [_vm._v("\n        " + _vm._s(error) + "\n      ")])
+  })], 2)])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-34350b4a", module.exports)
+  }
+}
+
+/***/ }),
 /* 154 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 155 */,
+/* 156 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 157 */,
+/* 158 */,
+/* 159 */,
+/* 160 */,
+/* 161 */,
+/* 162 */,
+/* 163 */,
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */,
+/* 170 */,
+/* 171 */,
+/* 172 */,
+/* 173 */,
+/* 174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(175)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction) {
+  isProduction = _isProduction
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 175 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 176 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(177);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(174)("634e494f", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8de6db88\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/less-loader/dist/index.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8de6db88\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/less-loader/dist/index.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 177 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(156)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.list-padding > li {\n  padding: 10px;\n}\n.list-padding > li:before,\n.list-padding > li:after {\n  content: \" \";\n  display: table;\n}\n.list-padding > li:after {\n  clear: both;\n}\n.list-striped > li:nth-child(even) {\n  background-color: #eee;\n}\n.list-hover > li:hover {\n  background-color: #e5e5e5;\n}\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

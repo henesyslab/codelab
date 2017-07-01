@@ -1,7 +1,7 @@
 <template>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    Clientes
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">Clientes</h3>
     <div class="pull-right">
       <div class="btn-group">
         <router-link v-bind:to="{ name: 'client.new' }" class="btn btn-primary btn-xs">
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="panel-body">
+  <div class="box-body">
     <p v-if="clients.length == 0" class="lead text-center text-warning">
       <i class="fa fa-warning"></i> Nada encontrado
     </p>

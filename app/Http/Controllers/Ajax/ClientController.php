@@ -59,6 +59,7 @@ class ClientController extends Controller
             'name' => $request->input('name'),
             'path' => $request->input('path'),
             'description' => $request->input('description'),
+            'notes' => $request->input('notes'),
         ]);
 
         return response()->json([
@@ -104,6 +105,7 @@ class ClientController extends Controller
         $client->fill([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'notes' => $request->input('notes'),
         ]);
         $client->save();
 
