@@ -12,13 +12,19 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import Vue       from 'vue'
+import Vue from 'vue'
 import VueRouter from 'vue-router'
-import router    from './router'
+import router from './router'
+import Meta from 'vue-meta'
 
 Vue.use(VueRouter)
+Vue.use(Meta)
 
 const app = new Vue({
   el: '#app',
   router,
+  metaInfo: {
+    title: 'Homepage',
+    titleTemplate: '%s | ' + document.getElementsByTagName('title')[0].innerText,
+  },
 })

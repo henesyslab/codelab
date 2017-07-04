@@ -7,3 +7,14 @@
     </p>
   </div>
 </template>
+
+<script>
+  export default {
+    metaInfo: {
+      title: 'Dashboard',
+      meta: [
+        { name: 'description', content: 'Painel de controle administrativo' }
+      ],
+    },
+  }
+</script>
