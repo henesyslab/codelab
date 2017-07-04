@@ -6,28 +6,28 @@
     padding: 10px;
   }
   .list-striped > li:nth-child(even) {
-    background-color: #eee;
+    background-color: #f9f9f9;
   }
   .list-hover > li:hover {
-    background-color: #e5e5e5;
+    background-color: #f5f5f5;
   }
 </style>
 
 <template>
-<div class="box box-primary">
-  <div class="box-header with-border">
-    <h3 class="box-title">Projetos</h3>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    Projetos
+  </div>
 
-    <div class="pull-right">
+  <div class="panel-body">
+    <div class="text-right margin-20">
       <div class="btn-group">
-        <router-link v-bind:to="{ name: 'project.new' }" class="btn btn-primary btn-xs">
+        <router-link v-bind:to="{ name: 'project.new' }" class="btn btn-primary">
           <i class="fa fa-plus"></i> Novo Projeto
         </router-link>
       </div>
     </div>
-  </div>
 
-  <div class="box-body">
     <p v-if="projects.length == 0" class="lead text-center text-warning">
       <i class="fa fa-warning"></i> Nada encontrado
     </p>

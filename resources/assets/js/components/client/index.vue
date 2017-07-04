@@ -1,17 +1,18 @@
 <template>
-<div class="box box-primary">
-  <div class="box-header with-border">
-    <h3 class="box-title">Clientes</h3>
-    <div class="pull-right">
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    Clientes
+  </div>
+
+  <div class="panel-body">
+    <div class="text-right margin-20">
       <div class="btn-group">
-        <router-link v-bind:to="{ name: 'client.new' }" class="btn btn-primary btn-xs">
+        <router-link v-bind:to="{ name: 'client.new' }" class="btn btn-primary">
           <i class="fa fa-plus"></i> Novo Cliente
         </router-link>
       </div>
     </div>
-  </div>
 
-  <div class="box-body">
     <p v-if="clients.length == 0" class="lead text-center text-warning">
       <i class="fa fa-warning"></i> Nada encontrado
     </p>
