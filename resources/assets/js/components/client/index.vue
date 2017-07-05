@@ -104,11 +104,12 @@
                 that.fetchClients()
                 // Exibe uma mensagem de sucesso
                 toastr.success(response.data.message, 'Sucesso')
-                // Fecha a janela modal
-                dialog.close()
               }).catch(error => {
-                console.log(error)
+                // Exibe a mensagem de erro
+                toastr.error(error.response.data.message, 'Erro')
               })
+
+              dialog.close()
             }
           }]
         })

@@ -41,7 +41,7 @@
 
           <div class="pull-right">
             <!-- View -->
-            <a v-bind:href="'https://gitlab.com/groups/' + project.path" target="_blank" class="btn btn-success btn-xs">
+            <a v-bind:href="'https://gitlab.com/' + project.client.path + '/' + project.path" target="_blank" class="btn btn-success btn-xs">
               <i class="fa fa-eye"></i>
             </a>
             <!-- Edit -->

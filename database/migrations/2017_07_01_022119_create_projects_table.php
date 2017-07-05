@@ -15,6 +15,7 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('gitlab_id')->unsigned();
             $table->integer('client_id')->unsigned();
             $table->foreign('client_id')
                 ->references('id')

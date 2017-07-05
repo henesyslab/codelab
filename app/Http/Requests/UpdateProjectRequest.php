@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class StoreClientRequest extends Request
+class UpdateProjectRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,6 @@ class StoreClientRequest extends Request
 
         return [
             'name' => 'required|max:255',
-            'path' => 'required|max:12|gitlab_unique',
             'description' => 'max:255',
         ];
     }

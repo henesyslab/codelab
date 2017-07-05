@@ -1,11 +1,12 @@
 <template>
   <div class="hide">
     <form id="formModal" method="post" v-on:submit.prevent>
-      <div v-bind:class="{ 'form-group': true, 'has-error': errors.name }">
+      <!-- Cliente -->
+      <div :class="{ 'form-group': true, 'has-error': errors.client_id }">
         <label class="control-label" for="client_id">Cliente</label>
         <select name="client_id" class="form-control" v-model="project.client_id">
           <option value="">Selecione...</option>
-          <option v-bind:value="client.id" v-for="client in clients">{{ client.name }}</option>
+          <option :value="client.id" v-for="client in clients">{{ client.name }}</option>
         </select>
         <div class="help-block" v-for="error in errors.client_id">
           {{ error }}
@@ -13,7 +14,8 @@
       </div>
 
       <div class="row">
-        <div v-bind:class="{ 'col-sm-6': true, 'form-group': true, 'has-error': errors.name }">
+        <!-- Nome -->
+        <div :class="{ 'col-sm-6': true, 'form-group': true, 'has-error': errors.name }">
           <label class="control-label" for="name">Nome</label>
           <input type="text" name="name" class="form-control" placeholder="Nome" v-model="project.name" v-on:keyup="fillPathField()">
           <div class="help-block" v-for="error in errors.name">
@@ -21,19 +23,39 @@
           </div>
         </div>
 
-        <div v-bind:class="{ 'col-sm-6': true, 'form-group': true, 'has-error': errors.path }">
+        <!-- Namespace -->
+        <div :class="{ 'col-sm-6': true, 'form-group': true, 'has-error': errors.path }">
           <label class="control-label" for="path">Namespace</label>
-          <input type="text" name="path" class="form-control" placeholder="Namespace" v-model="project.path" v-bind:disabled="$route.name === 'project.edit'">
+          <input type="text" name="path" class="form-control" placeholder="Namespace" v-model="project.path" :disabled="$route.name === 'project.edit'">
           <div class="help-block" v-for="error in errors.path">
             {{ error }}
           </div>
         </div>
       </div>
 
-      <div v-bind:class="{ 'form-group': true, 'has-error': errors.description }">
+      <!-- Descrição -->
+      <div :class="{ 'form-group': true, 'has-error': errors.description }">
         <label class="control-label" for="description">Descrição</label>
-        <textarea name="description" rows="2" class="form-control" placeholder="Descrição" v-model="project.description"></textarea>
+        <textarea name="description" rows="2" maxlength="255" class="form-control" placeholder="Descrição" v-model="project.description"></textarea>
         <div class="help-block" v-for="error in errors.description">
+          {{ error }}
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div :class="{ 'form-group': true, 'has-error': errors.tag_list }">
+        <label class="control-label" for="tag_list">Tags</label>
+        <input type="text" name="tag_list" class="form-control" placeholder="Tags" v-model="project.tag_list">
+        <div class="help-block" v-for="error in errors.tag_list">
+          {{ error }}
+        </div>
+      </div>
+
+      <!-- Notas -->
+      <div :class="{ 'form-group': true, 'has-error': errors.notes }">
+        <label class="control-label" for="notes">Notas</label>
+        <textarea name="notes" rows="5" class="form-control" placeholder="Notas" v-model="project.notes"></textarea>
+        <div class="help-block" v-for="error in errors.notes">
           {{ error }}
         </div>
       </div>
@@ -57,8 +79,8 @@
       }
     },
     mounted() {
-      // Preenche o select de clientes
-      this.fetchClients()
+      // Preenche o select de projetos
+      this.fetchProjects()
 
       // Exibe o formulário de cadastro ou edição
       if (this.$route.name === 'project.new') {
@@ -71,10 +93,10 @@
     },
     methods: {
       /**
-       * Busca pela lista de clientes cadastrados no sistema.
+       * Busca pela lista de projetos cadastrados no sistema.
        */
-      fetchClients() {
-        axios.get('/ajax/clientes').then(response => {
+      fetchProjects() {
+        axios.get('/ajax/projetos').then(response => {
           this.clients = response.data
         }).catch(error => {
           console.log(error)
@@ -147,7 +169,7 @@
        */
       openCreateForm() {
         this.openDialog(this.title, modal => {
-          this.storeClient(modal)
+          this.storeProject(modal)
         })
       },
 
@@ -159,7 +181,7 @@
           this.project = response.data
           this.title = 'Editando o Projeto: ' + this.project.name
           this.openDialog(this.title, modal => {
-            this.updateClient(modal)
+            this.updateProject(modal)
           })
         })
       },
@@ -168,7 +190,7 @@
        * Envia os novos dados para serem processados e armazenados pelo servidor.
        * @param  modal  Instância da janela modal
        */
-      storeClient(modal) {
+      storeProject(modal) {
         axios.post('/ajax/projetos', this.project).then(response => {
           // Exibe uma mensagem de sucesso
           toastr.success(response.data.message, 'Sucesso')
@@ -187,13 +209,13 @@
        * Envia os dados alterados para serem processados e armazenados pelo servidor.
        * @param  modal  Instância da janela modal
        */
-      updateClient(modal) {
+      updateProject(modal) {
         axios.patch('/ajax/projetos/' + this.$route.params.id, this.project).then(response => {
           // Exibe uma mensagem de sucesso
           toastr.success(response.data.message, 'Sucesso')
 
           // Atualiza a lista com os dados dos projetos
-          this.$parent.fetchClients()
+          this.$parent.fetchProjects()
 
           // Fecha a janela modal
           modal.dialog.close()

@@ -18,7 +18,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::orderBy('name')->get();
 
         return response()->json($clients);
     }
@@ -40,12 +40,12 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        // Tenta cria a namespace do cliente no GitLab
+        // Tenta criar a namespace do cliente no GitLab
         try {
             $gitlab = GitLab::api('groups')->create(
                 $request->input('name'),
                 $request->input('path'),
-                $request->input('description')
+                $request->input('description', '')
             );
         } catch (ErrorException $e) {
             return response()->json([
@@ -54,13 +54,9 @@ class ClientController extends Controller
         }
 
         // Salva o cliente no banco de dados
-        $client = Client::create([
-            'gitlab_id' => $gitlab['id'],
-            'name' => $request->input('name'),
-            'path' => $request->input('path'),
-            'description' => $request->input('description'),
-            'notes' => $request->input('notes'),
-        ]);
+        $client = new Client($request->input());
+        $client->gitlab_id = $gitlab['id'];
+        $client->save();
 
         return response()->json([
             'message' => 'Cliente cadastrado com sucesso!',
@@ -102,11 +98,7 @@ class ClientController extends Controller
     {
         // Atualiza o cliente no banco de dados
         $client = Client::findOrFail($id);
-        $client->fill([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'notes' => $request->input('notes'),
-        ]);
+        $client->fill($request->input());
         $client->save();
 
         // Atualiza a namespace do cliente no GitLab
@@ -129,12 +121,29 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
+        $client = Client::withCount('projects')->findOrFail($id);
+
+        // Se o cliente possui projetos...
+        if ($client->projects_count > 0) {
+            return response()->json([
+                'message' => 'Este cliente possui '.
+                $client->projects_count.
+                ($client->projects_count === 1 ? ' projeto' : ' projetos').
+                '. Remova os projetos primeiro.',
+            ], 412);
+        }
+
         // Remove o cliente do banco de dados
-        $client = Client::findOrFail($id);
         $client->delete();
 
         // Remove a namespace do cliente no GitLab
-        GitLab::api('groups')->remove($client->gitlab_id);
+        try {
+            GitLab::api('groups')->remove($client->gitlab_id);
+        } catch (ErrorException $e) {
+            return response()->json([
+                'message' => 'Não foi possível remover o cliente do GitLab.',
+            ], 500);
+        }
 
         return response()->json([
             'message' => 'Cliente removido com sucesso!',

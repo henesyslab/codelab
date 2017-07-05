@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class StoreClientRequest extends Request
+class StoreProjectRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class StoreClientRequest extends Request
         $this->sanitize();
 
         return [
+            'client_id' => 'required|integer',
             'name' => 'required|max:255',
-            'path' => 'required|max:12|gitlab_unique',
+            'path' => 'required|max:12',
             'description' => 'max:255',
         ];
     }

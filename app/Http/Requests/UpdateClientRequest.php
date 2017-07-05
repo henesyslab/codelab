@@ -21,6 +21,8 @@ class UpdateClientRequest extends Request
      */
     public function rules()
     {
+        $this->sanitize();
+
         return [
             'name' => 'required|max:255',
             'description' => 'max:255',

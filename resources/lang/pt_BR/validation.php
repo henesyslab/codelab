@@ -92,6 +92,7 @@ return [
     | Regras específicas deste projeto.
     */
     'gitlab_unique' => 'A namespace informada já está em uso.',
+    'client_not_exists' => 'O cliente selecionado não existe no banco de dados.',
 
     /*
     |--------------------------------------------------------------------------

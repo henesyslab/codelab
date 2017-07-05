@@ -18,4 +18,14 @@ class Client extends Model
         'description',
         'notes',
     ];
+
+    /**
+     * Define o relacionamento com a classe Project.
+     *
+     * @return \App\Models\Project
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

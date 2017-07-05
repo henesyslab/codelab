@@ -12,10 +12,22 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
+        'gitlab_id',
+        'client_id',
         'name',
         'path',
         'description',
         'tag_list',
         'notes',
     ];
+
+    /**
+     * Define o relacionamento com a classe Client.
+     *
+     * @return \App\Models\Client
+     */
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 }

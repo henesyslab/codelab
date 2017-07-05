@@ -17,4 +17,14 @@ abstract class Request extends FormRequest
             return empty(GitLab::api('users')->lookup($value));
         });
     }
+
+    /**
+     * Filtra os dados postados antes de serem validados.
+     */
+    protected function sanitize()
+    {
+        $input = $this->all();
+        $input = array_filter($this->all());
+        $this->replace($input);
+    }
 }
