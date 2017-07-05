@@ -17,34 +17,29 @@
         <i class="fa fa-warning"></i> Nada encontrado
       </p>
 
-      <table v-if="clients.length > 0" class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th style="width: 15%"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="client in clients" :id="'client_' + client.id">
-            <td>{{ client.path }}</td>
-            <td>{{ client.name }}</td>
-            <td>{{ client.description }}</td>
-            <td class="text-right">
-              <a :href="'https://gitlab.com/groups/' + client.path" target="_blank" class="btn btn-success btn-xs">
-                <i class="fa fa-eye"></i>
-              </a>
-              <router-link :to="{ name: 'client.edit', params: { id: client.id } }" class="btn btn-primary btn-xs">
-                <i class="fa fa-edit"></i>
-              </router-link>
-              <button class="btn btn-danger btn-xs" v-on:click.prevent="deleteClient(client.id)">
-                <i class="fa fa-times"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <ul v-if="clients.length > 0" class="list-unstyled list-padding list-striped list-hover">
+        <li v-for="client in clients" :id="'client_' + client.id">
+          <div class="pull-left">
+            <strong>{{ client.name }}</strong> <small class="text-muted">{{ client.path }}</small><br>
+            <span class="text-muted">{{ client.description }}</span>
+          </div>
+
+          <div class="pull-right">
+            <!-- View -->
+            <a :href="'https://gitlab.com/groups/' + client.path" target="_blank" class="btn btn-success btn-xs">
+              <i class="fa fa-eye"></i>
+            </a>
+            <!-- Edit -->
+            <router-link :to="{ name: 'client.edit', params: { id: client.id } }" class="btn btn-primary btn-xs">
+              <i class="fa fa-edit"></i>
+            </router-link>
+            <!-- Delete -->
+            <button class="btn btn-danger btn-xs" v-on:click.prevent="deleteClient(client.id)">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </li>
+      </ul>
     </div>
 
     <!-- Carrega a janela modal -->

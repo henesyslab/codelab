@@ -24,6 +24,7 @@
     "less-loader": "^4.0.4",
     "locutus": "^2.0.9",
     "lodash": "^4.17.4",
+    "marked": "^0.3.6",
     "speakingurl": "^13.0.0",
     "toastr": "^2.1.2",
     "vue": "^2.1.10",

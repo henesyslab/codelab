@@ -52,11 +52,16 @@
       </div>
 
       <!-- Notas -->
-      <div :class="{ 'form-group': true, 'has-error': errors.notes }">
+      <div :class="{ 'markdown-box': true, 'form-group': true, 'has-error': errors.notes }">
         <label class="control-label" for="notes">Notas</label>
-        <textarea name="notes" rows="5" class="form-control" placeholder="Notas" v-model="project.notes"></textarea>
-        <div class="help-block" v-for="error in errors.notes">
-          {{ error }}
+        <button class="btn btn-info btn-xs pull-right" v-on:click="toggleNotesEditor($event)"><i class="fa fa-pencil"></i></button>
+
+        <div v-show="!notesEditorOpen" v-html="formatedNotes" class="markdown-body"></div>
+        <div v-show="notesEditorOpen">
+          <textarea name="notes" rows="5" class="form-control" placeholder="Notas" v-model="project.notes"></textarea>
+          <div class="help-block" v-for="error in errors.notes">
+            {{ error }}
+          </div>
         </div>
       </div>
     </form>
@@ -72,35 +77,48 @@
           name: '',
           path: '',
           description: '',
+          notes: '',
         },
         clients: {},
         errors: {},
         title: '',
+        notesEditorOpen: true,
       }
     },
     mounted() {
       // Preenche o select de projetos
-      this.fetchProjects()
-
-      // Exibe o formulário de cadastro ou edição
-      if (this.$route.name === 'project.new') {
-        this.title = 'Novo Projeto'
-        this.openCreateForm()
-      } else {
-        this.title = 'Editando o Projeto'
-        this.openEditForm()
+      this.fetchClients().then(data => {
+        // Exibe o formulário de cadastro ou edição
+        if (this.$route.name === 'project.new') {
+          this.title = 'Novo Projeto'
+          this.openCreateForm()
+        } else {
+          this.title = 'Editando o Projeto'
+          this.openEditForm()
+        }
+      })
+    },
+    computed: {
+      formatedNotes() {
+        return marked(this.project.notes)
       }
     },
     methods: {
       /**
-       * Busca pela lista de projetos cadastrados no sistema.
+       * Busca pela lista de clientes cadastrados no sistema.
        */
-      fetchProjects() {
-        axios.get('/ajax/projetos').then(response => {
+      fetchClients() {
+    	  var d = $.Deferred()
+
+        axios.get('/ajax/clientes').then(response => {
           this.clients = response.data
+
+          d.resolve(response.data)
         }).catch(error => {
           console.log(error)
         })
+
+        return d.promise()
       },
 
       /**
@@ -122,6 +140,7 @@
           name: '',
           path: '',
           description: '',
+          notes: '',
         }
       },
 
@@ -132,6 +151,7 @@
        */
       openDialog(title, callback) {
         BootstrapDialog.show({
+          size: BootstrapDialog.SIZE_WIDE,
           type: BootstrapDialog.TYPE_PRIMARY,
           title: title,
           message: $('#formModal'),
@@ -183,6 +203,12 @@
           this.openDialog(this.title, modal => {
             this.updateProject(modal)
           })
+
+          // Se existe algum conteudo no campo de notas,
+          // então exibe o conteúdo formatado ao invés do editor
+          if (this.project.notes !== '') {
+            this.notesEditorOpen = false
+          }
         })
       },
 
@@ -224,6 +250,21 @@
           modal.button.enable().stopSpin()
           modal.dialog.setClosable(true)
         })
+      },
+
+      /**
+       * Alterna entre edição e exibição das notas do projeto.
+       */
+      toggleNotesEditor(event) {
+        // Alterna o status do editor
+        this.notesEditorOpen = !this.notesEditorOpen
+
+        // Se o editor está aberto...
+        if (this.notesEditorOpen) {
+          $('> .fa', event.currentTarget).removeClass('fa-pencil').addClass('fa-check')
+        } else {
+          $('> .fa', event.currentTarget).removeClass('fa-check').addClass('fa-pencil')
+        }
       },
     },
     metaInfo() {

@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
-use Vinkla\GitLab\Facades\GitLab;
 use GitLab\Exception\ErrorException;
+use Vinkla\GitLab\Facades\GitLab;
 
 class ClientController extends Controller
 {
@@ -96,16 +96,21 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, $id)
     {
-        // Atualiza o cliente no banco de dados
+        // Atualiza o cliente
         $client = Client::findOrFail($id);
         $client->fill($request->input());
-        $client->save();
 
-        // Atualiza a namespace do cliente no GitLab
-        $gitlab = GitLab::api('groups')->update($client->gitlab_id, [
-            'name' => $client->name,
-            'description' => $client->description,
-        ]);
+        // Verifica se os dados do GitLab mudaram
+        if ($client->isDirty('name') || $client->isDirty('description')) {
+            // Atualiza a namespace do cliente no GitLab
+            $gitlab = GitLab::api('groups')->update($client->gitlab_id, [
+                'name' => $client->name,
+                'description' => $client->description,
+            ]);
+        }
+
+        // Persiste os dados no banco
+        $client->save();
 
         return response()->json([
             'message' => 'Cliente atualizado com sucesso!',

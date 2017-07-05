@@ -19,7 +19,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::with('client')->get();
+        $projects = Project::fetchAll();
 
         return response()->json($projects);
     }
@@ -67,7 +67,7 @@ class ProjectController extends Controller
         }
 
         // Salva o projeto no banco de dados
-        $project = new Project($request->input());
+        $project = new Project($request->all());
         $project->gitlab_id = $gitlab['id'];
         $project->save();
 
@@ -109,17 +109,22 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, $id)
     {
-        // Atualiza o projeto no banco de dados
+        // Atualiza o projeto
         $project = Project::findOrFail($id);
-        $project->fill($request->input());
-        $project->save();
+        $project->fill($request->all());
 
-        // Atualiza o repositório do projeto no GitLab
-        $gitlab = GitLab::api('projects')->update($project->gitlab_id, [
-            'name' => $project->name,
-            'description' => $request->input('description', ''),
-            'tag_list' => $request->input('tag_list', ''),
-        ]);
+        // Verifica se os dados do GitLab mudaram
+        if ($project->isDirty('name') || $project->isDirty('description') || $project->isDirty('tag_list')) {
+            // Atualiza o repositório do projeto no GitLab
+            $gitlab = GitLab::api('projects')->update($project->gitlab_id, [
+                'name' => $project->name,
+                'description' => $project->description,
+                'tag_list' => $project->tag_list,
+            ]);
+        }
+
+        // Persiste os dados no banco
+        $project->save();
 
         return response()->json([
             'message' => 'Projeto atualizado com sucesso!',

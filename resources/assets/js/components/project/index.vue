@@ -1,18 +1,3 @@
-<style lang="less">
-  @import "~bootstrap/less/mixins/clearfix";
-
-  .list-padding > li {
-    .clearfix;
-    padding: 10px;
-  }
-  .list-striped > li:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  .list-hover > li:hover {
-    background-color: #f5f5f5;
-  }
-</style>
-
 <template>
   <div class="panel panel-primary">
     <div class="panel-heading">
@@ -22,7 +7,7 @@
     <div class="panel-body">
       <div class="text-right margin-20">
         <div class="btn-group">
-          <router-link v-bind:to="{ name: 'project.new' }" class="btn btn-primary">
+          <router-link :to="{ name: 'project.new' }" class="btn btn-primary">
             <i class="fa fa-plus"></i> Novo Projeto
           </router-link>
         </div>
@@ -33,19 +18,19 @@
       </p>
 
       <ul v-if="projects.length > 0" class="list-unstyled list-padding list-striped list-hover">
-        <li v-for="project in projects" v-bind:id="'project_' + project.id">
+        <li v-for="project in projects" :id="'project_' + project.id">
           <div class="pull-left">
-            <strong>{{ project.path }} / {{ project.name }}</strong><br>
+            <strong>{{ project.client.name }} / {{ project.name }}</strong><br>
             <span class="text-muted">{{ project.description }}</span>
           </div>
 
           <div class="pull-right">
             <!-- View -->
-            <a v-bind:href="'https://gitlab.com/' + project.client.path + '/' + project.path" target="_blank" class="btn btn-success btn-xs">
+            <a :href="'https://gitlab.com/' + project.client.path + '/' + project.path" target="_blank" class="btn btn-success btn-xs">
               <i class="fa fa-eye"></i>
             </a>
             <!-- Edit -->
-            <router-link v-bind:to="{ name: 'project.edit', params: { id: project.id } }" class="btn btn-primary btn-xs">
+            <router-link :to="{ name: 'project.edit', params: { id: project.id } }" class="btn btn-primary btn-xs">
               <i class="fa fa-edit"></i>
             </router-link>
             <!-- Delete -->
