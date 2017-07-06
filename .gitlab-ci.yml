@@ -1,7 +1,7 @@
 image: agenciacodedev/gitlab-ci:3.0
 
 variables:
-  MYSQL_DATABASE: codedev
+  MYSQL_DATABASE: homestead
   MYSQL_ROOT_PASSWORD: secret
   SSH_USER_HOST: codedev@159.203.87.52
 

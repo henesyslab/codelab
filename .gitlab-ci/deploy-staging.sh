@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Pasta do projeto
-cd ~/beta_codedev
+cd ~/beta_brain
 
 # Verifica se não houve alterações nos arquivos versionados do sistema
 if ! git diff-index --quiet HEAD --; then
