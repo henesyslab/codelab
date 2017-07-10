@@ -26,7 +26,7 @@
 
           <div class="pull-right">
             <!-- View -->
-            <a :href="'https://gitlab.com/groups/' + client.path" target="_blank" class="btn btn-success btn-xs">
+            <a :href="'https://gitlab.com/' + client.gitlab_api + '/' + client.path" target="_blank" class="btn btn-success btn-xs">
               <i class="fa fa-eye"></i>
             </a>
             <!-- Edit -->

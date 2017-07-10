@@ -16,6 +16,7 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('gitlab_id')->unsigned();
+            $table->enum('gitlab_api', ['groups','users'])->default('groups');
             $table->string('name');
             $table->string('path');
             $table->string('description');

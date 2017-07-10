@@ -103,7 +103,7 @@ class ClientController extends Controller
         // Verifica se os dados do GitLab mudaram
         if ($client->isDirty('name') || $client->isDirty('description')) {
             // Atualiza a namespace do cliente no GitLab
-            $gitlab = GitLab::api('groups')->update($client->gitlab_id, [
+            $gitlab = GitLab::api($client->gitlab_api)->update($client->gitlab_id, [
                 'name' => $client->name,
                 'description' => $client->description,
             ]);

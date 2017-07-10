@@ -13,6 +13,7 @@ class Client extends Model
      */
     protected $fillable = [
         'gitlab_id',
+        'gitlab_api',
         'name',
         'path',
         'description',
