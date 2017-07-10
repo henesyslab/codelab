@@ -168,6 +168,7 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         Vinkla\GitLab\GitLabServiceProvider::class,
+        GeneaLabs\LaravelCaffeine\Providers\LaravelCaffeineService::class,
 
         /*
          * Application Service Providers...
