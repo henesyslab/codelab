@@ -13,7 +13,7 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::connection('sqlite')->create('clients', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('gitlab_id')->unsigned();
             $table->enum('gitlab_api', ['groups','users'])->default('groups');
@@ -32,6 +32,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::connection('sqlite')->dropIfExists('clients');
     }
 }

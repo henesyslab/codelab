@@ -29,6 +29,12 @@
               <p>Projetos</p>
             </router-link>
           </router-link>
+          <router-link tag="li" :to="{ name: 'fastway.task' }">
+            <router-link :to="{ name: 'fastway.task' }">
+              <i class="fa fa-bolt"></i>
+              <p>Tarefas FastWay</p>
+            </router-link>
+          </router-link>
         </ul>
       </div>
       <div class="sidebar-background"></div>

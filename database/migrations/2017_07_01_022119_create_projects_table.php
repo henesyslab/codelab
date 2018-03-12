@@ -13,7 +13,7 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::connection('sqlite')->create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('gitlab_id')->unsigned();
             $table->integer('client_id')->unsigned();
@@ -37,6 +37,6 @@ class CreateProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::connection('sqlite')->dropIfExists('projects');
     }
 }

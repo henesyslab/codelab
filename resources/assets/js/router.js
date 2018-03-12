@@ -1,15 +1,17 @@
 import VueRouter from 'vue-router'
 
 // Define route components
-const Dashboard = require('./components/dashboard.vue')
+const Dashboard = require('./components/dashboard')
 const Client = {
-  index: require('./components/client/index.vue'),
-  form:  require('./components/client/form.vue'),
+  index: require('./components/client/index'),
+  form:  require('./components/client/form'),
 }
 const Project = {
-  index: require('./components/project/index.vue'),
-  form:  require('./components/project/form.vue'),
+  index: require('./components/project/index'),
+  form:  require('./components/project/form'),
 }
+
+import FastWayTask from './components/FastWay/Task'
 
 export default new VueRouter({
     mode: 'history',
@@ -25,5 +27,6 @@ export default new VueRouter({
         { path: 'adicionar', name: 'project.new', component: Project.form },
         { path: 'editar/:id', name: 'project.edit', component: Project.form },
       ] },
+      { path: '/fastway-task', name: 'fastway.task', component: FastWayTask },
     ]
 })
