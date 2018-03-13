@@ -55,7 +55,7 @@ deploy beta:
     # Commands to run on remote host
     - >
       ssh $SSH_USER_HOST <<'ENDSSH'
-        cd ~/brain
+        cd ~/.home/codedev/brain
         git reset --hard && git clean -df
         git checkout master
         git pull --rebase
@@ -87,7 +87,7 @@ deploy live:
     # Commands to run on remote host
     - >
       ssh $SSH_USER_HOST <<'ENDSSH'
-        cd ~/brain
+        cd ~/.home/codedev/brain
         git checkout production
         git pull --rebase
       ENDSSH
