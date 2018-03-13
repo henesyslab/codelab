@@ -51,8 +51,8 @@
     data() {
       return {
         task: {
-          name: 'Lorem ipsum dolor sit amet',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur unde ex dolorem, amet qui sequi! Ducimus eveniet vel nisi odio placeat odit, dolorum beatae architecto quas iure, dolorem commodi, ea.'
+          name: '',
+          description: ''
         },
         errors: {}
       }

@@ -1,52 +1,93 @@
-image: agenciacodedev/gitlab-ci:3.0
+image: agcodedev/gitlabci:latest
 
-variables:
-  MYSQL_DATABASE: homestead
-  MYSQL_ROOT_PASSWORD: secret
-  SSH_USER_HOST: agenciacodedev@159.203.87.52
+# This folder is cached between builds
+# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+cache:
+  paths:
+  - vendor/
 
-tests:
+laravel tests:
   stage: test
   only:
     - master
     - production
-  services:
-    - mysql:5.7
   script:
-    - .gitlab-ci/tests.sh
+    # Install dependencies.
+    - composer install
 
-beta:
+    # Copy over testing configuration.
+    - cp .env.example .env
+    - sed -i 's/^APP_ENV=.*$/APP_ENV=testing/g' .env
+    - sed -i 's/^DB_HOST=.*$/DB_HOST=sqlite/g' .env
+    - sed -i 's/^DB_DATABASE=.*$/DB_DATABASE=":memory:"/g' .env
+    - sed -i 's/^CACHE_DRIVER=.*$/CACHE_DRIVER=array/g' .env
+    - sed -i 's/^SESSION_DRIVER=.*$/SESSION_DRIVER=array/g' .env
+    - sed -i 's/^MAIL_DRIVER=.*$/MAIL_DRIVER=log/g' .env
+
+    # Generate an application key. Re-cache.
+    - php artisan key:generate
+    - php artisan config:cache
+
+    # run laravel tests
+    - php vendor/bin/phpunit --coverage-text --colors=never
+
+deploy beta:
   stage: deploy
   environment:
     name: staging
-    url: http://beta.codedev.com.br
+    url: https://www.codedev.com.br
   only:
     - master
   script:
-    # Comandos essenciais para conectar o Docker com o servidor externo.
-    # Para saber mais: https://docs.gitlab.com/ee/ci/ssh_keys/README.html#ssh-keys-when-using-the-docker-executor
+    # Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
-    # Conecta no servidor via SSH e executa o arquivo shell de deploy
-    - ssh -T $SSH_USER_HOST 'bash -s' < .gitlab-ci/deploy-staging.sh
 
-live:
+    # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+    # For Docker builds disable host key checking. Be aware that by adding that
+    # you are suspectible to man-in-the-middle attacks.
+    # WARNING: Use this only with the Docker executor, if you use it with shell
+    # you will overwrite your user's SSH config.
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+    # Commands to run on remote host
+    - >
+      ssh $SSH_USER_HOST <<'ENDSSH'
+        cd ~/brain
+        git reset --hard && git clean -df
+        git checkout master
+        git pull --rebase
+        composer install --no-dev
+        php artisan migrate:fresh --seed
+      ENDSSH
+
+deploy live:
   stage: deploy
   environment:
     name: production
-    url: http://www.codedev.com.br
+    url: https://www.codedev.com.br
   only:
     - production
   script:
-    # Comandos essenciais para conectar o Docker com o servidor externo.
-    # Para saber mais: https://docs.gitlab.com/ee/ci/ssh_keys/README.html#ssh-keys-when-using-the-docker-executor
+    # Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
+
+    # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+    # For Docker builds disable host key checking. Be aware that by adding that
+    # you are suspectible to man-in-the-middle attacks.
+    # WARNING: Use this only with the Docker executor, if you use it with shell
+    # you will overwrite your user's SSH config.
     - mkdir -p ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
-    # Conecta no servidor via SSH e executa o arquivo shell de deploy
-    - ssh -T $SSH_USER_HOST 'bash -s' < .gitlab-ci/deploy-production.sh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+    # Commands to run on remote host
+    - >
+      ssh $SSH_USER_HOST <<'ENDSSH'
+        cd ~/brain
+        git checkout production
+        git pull --rebase
+      ENDSSH

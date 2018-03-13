@@ -65,6 +65,7 @@ return [
         'array'   => 'O campo :attribute deve ter no mínimo :min itens.',
     ],
     'not_in'               => 'O campo :attribute contém um valor inválido.',
+    'not_regex'            => 'O formato do valor para o campo :attribute é inválido.',
     'numeric'              => 'O campo :attribute deverá conter um valor numérico.',
     'present'              => 'O campo :attribute deve existir.',
     'regex'                => 'O formato do valor para o campo :attribute é inválido.',
