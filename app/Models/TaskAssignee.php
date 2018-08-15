@@ -11,7 +11,7 @@ class TaskAssignee extends Model
      *
      * @var string
      */
-    protected $table = 'stafftaskassignees';
+    protected $table = 'task_assigned';
 
     /**
      * The attributes that are mass assignable.

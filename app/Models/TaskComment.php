@@ -11,7 +11,7 @@ class TaskComment extends Model
      *
      * @var string
      */
-    protected $table = 'stafftaskcomments';
+    protected $table = 'task_comments';
 
     /**
      * The attributes that are mass assignable.

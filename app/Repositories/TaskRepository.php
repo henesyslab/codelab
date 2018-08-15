@@ -35,7 +35,7 @@ class TaskRepository extends BaseRepository
         return $this->model
                 ->from("$table as table")
                 ->select($columns)
-                ->leftJoin('stafftaskassignees as ta', 'table.id', '=', 'ta.taskid')
+                ->leftJoin('task_assigned as ta', 'table.id', '=', 'ta.taskid')
                 ->where('ta.staffid', $this->model::USER_ID)
                 ->get();
     }
@@ -52,6 +52,7 @@ class TaskRepository extends BaseRepository
             'dateadded' => date('Y-m-d H:i:s'),
             'startdate' => date('Y-m-d'),
             'duedate' => date('Y-m-d', strtotime('+3 days')),
+            'deadline_notified' => 1,
         ]);
 
         $this->model->fill($data);
@@ -71,18 +72,18 @@ class TaskRepository extends BaseRepository
      */
     protected function taskMetadata(int $id)
     {
-        DB::table('stafftaskassignees')->insert([
+        DB::table('task_assigned')->insert([
             'staffid' => $this->model::USER_ID,
             'taskid' => $id,
             'assigned_from' => $this->model::USER_ID,
         ]);
 
-        DB::table('stafftasksfollowers')->insert([
+        DB::table('task_followers')->insert([
             'staffid' => 1,
             'taskid' => $id,
         ]);
 
-        DB::table('tags_in')->insert([
+        DB::table('taggables')->insert([
             'rel_id' => $id,
             'rel_type' => 'task',
             'tag_id' => 8,

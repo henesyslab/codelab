@@ -9,7 +9,7 @@
     <title>{{ config('app.name') }}</title>
 
     <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,700,300">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700,300">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     @stack('styles')
   </head>

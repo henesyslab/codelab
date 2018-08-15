@@ -1,14 +1,14 @@
 import VueRouter from 'vue-router'
 
 // Define route components
-const Dashboard = require('./components/dashboard')
+const Dashboard = require('./components/dashboard').default
 const Client = {
-  index: require('./components/client/index'),
-  form:  require('./components/client/form'),
+  index: require('./components/client/index').default,
+  form:  require('./components/client/form').default,
 }
 const Project = {
-  index: require('./components/project/index'),
-  form:  require('./components/project/form'),
+  index: require('./components/project/index').default,
+  form:  require('./components/project/form').default,
 }
 
 import FastWayTask from './components/FastWay/Task'

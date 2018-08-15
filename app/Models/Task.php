@@ -31,7 +31,7 @@ class Task extends Model
      *
      * @var string
      */
-    protected $table = 'stafftasks';
+    protected $table = 'tasks';
 
     /**
      * The attributes that are mass assignable.
@@ -52,7 +52,9 @@ class Task extends Model
         'recurring_type',
         'repeat_every',
         'recurring',
-        'recurring_ends_on',
+        'is_recurring_from',
+        'cycles',
+        'total_cycles',
         'custom_recurring',
         'last_recurring_date',
         'rel_id',
