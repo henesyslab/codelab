@@ -22,7 +22,8 @@ RUN composer dump-autoload --no-scripts --optimize --no-dev --classmap-authorita
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R ug+rwX storage bootstrap/cache
 
-RUN sed -i 's|^listen = .*|listen = 9000|' /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i 's|^listen = .*|listen = 9000|' /usr/local/etc/php-fpm.d/www.conf \
+    && echo 'clear_env = no' >> /usr/local/etc/php-fpm.d/www.conf
 
 EXPOSE 9000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \

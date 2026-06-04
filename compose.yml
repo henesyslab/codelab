@@ -1,0 +1,44 @@
+services:
+  codelab-php:
+    image: registry.codelab.tec.br/codelab/codelab:latest
+    container_name: codelab-php
+    restart: unless-stopped
+    pull_policy: always
+    env_file:
+      - .env
+    volumes:
+      - /opt/data/codelab/storage:/var/www/html/storage
+      - /opt/data/codelab/bootstrap-cache:/var/www/html/bootstrap/cache
+      - /opt/data/codelab/database.sqlite:/var/www/html/database/database.sqlite
+    networks:
+      - traefik-public
+      - mariadb-internal
+    mem_limit: 256m
+
+  codelab-nginx:
+    image: registry.codelab.tec.br/codelab/codelab-nginx:latest
+    container_name: codelab-nginx
+    restart: unless-stopped
+    pull_policy: always
+    depends_on:
+      - codelab-php
+    networks:
+      - traefik-public
+    mem_limit: 64m
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.codelab.rule=Host(`codelab.tec.br`) || Host(`www.codelab.tec.br`)"
+      - "traefik.http.routers.codelab.entrypoints=websecure"
+      - "traefik.http.routers.codelab.tls=true"
+      - "traefik.http.routers.codelab.middlewares=codelab-www-redirect@docker,security-headers@file"
+      - "traefik.http.services.codelab.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.codelab-www-redirect.redirectregex.regex=^https?://www\\.codelab\\.tec\\.br/(.*)"
+      - "traefik.http.middlewares.codelab-www-redirect.redirectregex.replacement=https://codelab.tec.br/$${1}"
+      - "traefik.http.middlewares.codelab-www-redirect.redirectregex.permanent=true"
+
+networks:
+  traefik-public:
+    external: true
+  mariadb-internal:
+    external: true
